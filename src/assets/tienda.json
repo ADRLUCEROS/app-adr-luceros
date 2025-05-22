@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
+    "codigo_tienda": 161566,
+    "codigo_entrada": "P100",
+    "departamento": "Lima",
+    "distrito": "Lima Cercado",
+    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
+    "observacion": "",
+    "hora_inicio": "9:00 a.m.",
+    "hora_fin": "11:00 a.m."
+  },
+  {
+    "id": 2,
+    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
+    "codigo_tienda": 161566,
+    "codigo_entrada": "P101",
+    "departamento": "Lima",
+    "distrito": "Lima Cercado",
+    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
+    "observacion": "",
+    "hora_inicio": "9:00 a.m.",
+    "hora_fin": "11:00 a.m."
+  },
+  {
+    "id": 3,
+    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
+    "codigo_tienda": 161566,
+    "codigo_entrada": "P102",
+    "departamento": "Lima",
+    "distrito": "Lima Cercado",
+    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
+    "observacion": "",
+    "hora_inicio": "9:00 a.m.",
+    "hora_fin": "11:00 a.m."
+  }
+]
