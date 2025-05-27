@@ -1,12 +1,12 @@
 export interface Tienda {
-  id: number;
-  nombre: string;
-  codigo_tienda: number;
-  codigo_entrada: string;
-  departamento: string;
-  distrito: string;
+  idTienda: number;
+  nombreTienda: string;
+  codigoTienda: number;
+  codigoEntrada: string;
+  idTiendaUbi: number;
   direccion: string;
   observacion?: string;
-  hora_inicio: string;
-  hora_fin: string;
+  horarioInicio: string;
+  horarioFin: string;
+  sn: string;
 }
