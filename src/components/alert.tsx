@@ -6,17 +6,29 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogDescription } from "@radix-ui/react-alert-dialog"
 
-export function AlertDialogDemo() {
+interface BaseAlertProps {
+  title: string
+  description?: string
+  isOpen: boolean
+  closeDialog: () => void
+  action: () => void
+}
+
+export function AlertDialogDemo({ title, description = "", isOpen, closeDialog, action }: BaseAlertProps) {
   return (
+    <AlertDialog open={isOpen} onOpenChange={closeDialog}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Estas seguro que quieres eliminar esta tienda?</AlertDialogTitle>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction>Eliminar</AlertDialogAction>
+          <AlertDialogAction onClick={() => action()}>Eliminar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
+    </AlertDialog>
   )
 }
