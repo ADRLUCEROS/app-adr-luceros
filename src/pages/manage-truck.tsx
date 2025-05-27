@@ -11,6 +11,7 @@ import { normalize } from '@/utils/normalizeText'
 import type { Truck } from "@/models/truck"
 import { getCamion } from "@/http/camion-service"
 import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
 import { TruckSheet } from "@/components/TruckSheet"
 
 const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
@@ -49,7 +50,7 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("placa")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("placa")}</div>,
   },
   {
     accessorKey: "codTarjCircu",
@@ -64,10 +65,10 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("codTarjCircu")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("codTarjCircu")}</div>,
   },
   {
-    accessorKey: "anoFabricacion",
+    accessorKey: "añoFab",
     header: ({ column }) => {
       return (
         <Button
@@ -79,11 +80,11 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("anoFabricacion")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("añoFab")}</div>,
   },
   {
     accessorKey: "dimensiones",
-    accessorFn: row =>  `${row.altura}(alt) x ${row.longitud}(lon) x ${row.ancho}(ancho)`,
+    accessorFn: row =>  `${row.altura}m(alt) x ${row.longitud}m(lon) x ${row.ancho}m(ancho)`,
     header: ({ column }) => {
       return (
         <Button
@@ -99,6 +100,7 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
   },
   {
     accessorKey: "pesoUtil",
+    accessorFn: row =>  `${row.pesoUtil / 100} T`,
     header: ({ column }) => {
       return (
         <Button
@@ -110,7 +112,37 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("pesoUtil")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("pesoUtil")}</div>,
+  },
+  {
+    accessorKey: "estado",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Estado
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const estado: string = row.getValue("estado")
+      const classByState = (value: string) => {
+        switch (value) {
+          case "activo":
+            return "text-green-800 bg-green-100"
+          case "baja":
+            return "text-red-800 bg-red-100"
+          case "mantenimiento":
+            return "text-yellow-800 bg-yellow-100"
+          default:
+            return "text-gray-800 bg-gray-100"
+        }
+      }
+      return <div className={`lowercase text-center`}><Badge className={classByState(estado)}>{estado}</Badge></div>
+    },
   },
   {
     accessorKey: "_",
