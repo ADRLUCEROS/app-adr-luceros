@@ -88,6 +88,25 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Tienda>[] => [
     cell: ({ row }) => <div className="lowercase">{row.getValue("direccion")}</div>,
   },
   {
+    accessorKey: "empresa",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Empresa
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const empresa: any[] = row.getValue("empresa")
+      if(empresa.length === 0) return <div className="lowercase">N/A</div>
+      return <div className="lowercase">{empresa[0].razonSocial}</div>
+    },
+  },
+  {
     accessorKey: "observacion",
     header: ({ column }) => {
       return (
