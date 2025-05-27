@@ -1,30 +1,24 @@
 import {
   SheetClose,
-  SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { BaseSheet } from "./BaseSheet"
 
-interface ReusableSheetProps {
-  title: string
-  description: string
+interface TiendaSheetProps {
   onSave: () => void
+  isOpen: boolean
+  closeSheet: () => void
 }
 
-export function ReusableSheet({ title, description, onSave }: ReusableSheetProps) {
+export function TiendaSheet({ onSave, isOpen, closeSheet }: TiendaSheetProps) {
 
   return (
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle><span className="text-2xl">{title}</span></SheetTitle>
-          <SheetDescription>{description}</SheetDescription>
-        </SheetHeader>
-        <div className="grid gap-4 py-4 px-4">
+    <BaseSheet title="Registrar tienda" isOpen={isOpen} closeSheet={closeSheet}>
+      <>
+       <div className="grid gap-4 py-4 px-4">
           <div className="grid items-center gap-2">
             <Label htmlFor="name" className="text-right">
               Nombre de tienda
@@ -67,10 +61,7 @@ export function ReusableSheet({ title, description, onSave }: ReusableSheetProps
             <Button
               type="button"
               variant="outline"
-              onClick={() => {
-                onSave()
-                close()
-              }}
+              onClick={() => {}}
             >
               Cancelar
             </Button>
@@ -80,13 +71,13 @@ export function ReusableSheet({ title, description, onSave }: ReusableSheetProps
               type="button"
               onClick={() => {
                 onSave()
-                close()
               }}
             >
               Guardar
             </Button>
           </SheetClose>
         </SheetFooter>
-      </SheetContent>
+      </>
+    </BaseSheet>
   )
 }
