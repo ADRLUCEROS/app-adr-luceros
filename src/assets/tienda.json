@@ -1,38 +1,102 @@
 [
   {
-    "id": 1,
-    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
-    "codigo_tienda": 161566,
-    "codigo_entrada": "P100",
-    "departamento": "Lima",
-    "distrito": "Lima Cercado",
-    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
-    "observacion": "",
-    "hora_inicio": "9:00 a.m.",
-    "hora_fin": "11:00 a.m."
+    "idTienda": 1,
+    "nombreTienda": "Tienda Centro",
+    "horarioInicio": "08:00:00",
+    "horarioFin": "21:00:00",
+    "idTiendaUbi": 1,
+    "direccion": "Av. Principal 123",
+    "observacion": "Cerca de la plaza central",
+    "sn": "A1"
   },
   {
-    "id": 2,
-    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
-    "codigo_tienda": 161566,
-    "codigo_entrada": "P101",
-    "departamento": "Lima",
-    "distrito": "Lima Cercado",
-    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
-    "observacion": "",
-    "hora_inicio": "9:00 a.m.",
-    "hora_fin": "11:00 a.m."
+    "idTienda": 2,
+    "nombreTienda": "Tienda Norte",
+    "horarioInicio": "09:00:00",
+    "horarioFin": "20:00:00",
+    "idTiendaUbi": 2,
+    "direccion": "Calle Norte 456",
+    "observacion": null,
+    "sn": "B2"
   },
   {
-    "id": 3,
-    "nombre": "ABASTECEDORA ALIMENTICIA SAC",
-    "codigo_tienda": 161566,
-    "codigo_entrada": "P102",
-    "departamento": "Lima",
-    "distrito": "Lima Cercado",
-    "direccion": "Jr. Huanuco 925 - Cercado de Lima",
-    "observacion": "",
-    "hora_inicio": "9:00 a.m.",
-    "hora_fin": "11:00 a.m."
+    "idTienda": 3,
+    "nombreTienda": "MiniMarket Sur",
+    "horarioInicio": "07:30:00",
+    "horarioFin": "22:00:00",
+    "idTiendaUbi": 3,
+    "direccion": "Av. Sur 789",
+    "observacion": "Atiende domingos",
+    "sn": "C3"
+  },
+  {
+    "idTienda": 4,
+    "nombreTienda": "Express Oriente",
+    "horarioInicio": "10:00:00",
+    "horarioFin": "18:00:00",
+    "idTiendaUbi": 4,
+    "direccion": "Jr. Oriente 321",
+    "observacion": "Pequeo local",
+    "sn": "D4"
+  },
+  {
+    "idTienda": 5,
+    "nombreTienda": "SuperTienda Oeste",
+    "horarioInicio": "08:30:00",
+    "horarioFin": "19:30:00",
+    "idTiendaUbi": 5,
+    "direccion": "Calle Oeste 654",
+    "observacion": null,
+    "sn": "E5"
+  },
+  {
+    "idTienda": 6,
+    "nombreTienda": "Tienda Plaza",
+    "horarioInicio": "09:00:00",
+    "horarioFin": "21:00:00",
+    "idTiendaUbi": 1,
+    "direccion": "Plaza Mayor 111",
+    "observacion": "Incluye farmacia",
+    "sn": "F6"
+  },
+  {
+    "idTienda": 7,
+    "nombreTienda": "Market Urbano",
+    "horarioInicio": "07:00:00",
+    "horarioFin": "23:00:00",
+    "idTiendaUbi": 6,
+    "direccion": "Av. Urbana 222",
+    "observacion": "24 horas en verano",
+    "sn": "G7"
+  },
+  {
+    "idTienda": 8,
+    "nombreTienda": "Comercial Andina",
+    "horarioInicio": "08:15:00",
+    "horarioFin": "20:45:00",
+    "idTiendaUbi": 7,
+    "direccion": "Av. Andina 333",
+    "observacion": null,
+    "sn": "H8"
+  },
+  {
+    "idTienda": 9,
+    "nombreTienda": "Mercado Central",
+    "horarioInicio": "06:00:00",
+    "horarioFin": "18:00:00",
+    "idTiendaUbi": 8,
+    "direccion": "Calle Comercio 999",
+    "observacion": "Zona de abastos",
+    "sn": "I9"
+  },
+  {
+    "idTienda": 10,
+    "nombreTienda": "Tienda Express",
+    "horarioInicio": "10:00:00",
+    "horarioFin": "22:00:00",
+    "idTiendaUbi": 9,
+    "direccion": "Jr. Express 100",
+    "observacion": "Nuevo local",
+    "sn": "J0"
   }
 ]
