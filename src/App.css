@@ -5,7 +5,34 @@
   width: 100%;
 }
 
-.sidebar {
-  background-color: #bbbbbb;
-  padding: 20px;
+.button-sidebar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  position: relative;
+  align-items: center;
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+  }
+
+  &:hover {
+    background-color: #ffffff1a;
+  }
+
+  &:active {
+    background-color: #00000033;
+  }
+}
+
+.button-sidebar.active {
+  background-color: #00000039;
+  &::before {
+    background-color: #4444f0;
+  }
 }

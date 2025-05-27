@@ -1,18 +1,29 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import App from './App.tsx'
 import { ManageStore } from './pages/manage-store.tsx';
+import { ManageTruck } from './pages/manage-truck.tsx';
+import { ManageWorker } from './pages/manage-worker.tsx';
+import { ManagePartner } from './pages/manage-partner.tsx';
+import { ManageDelivery } from './pages/manage-delivery.tsx';
+
+import { ROUTES } from '@/const/router.ts'
+const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<ManageStore />} />
+        <Route path='/' element={<App />}>
+          <Route path='/' element={<Navigate to='manage-store' replace />} />
+          <Route path={store} element={<ManageStore />} />
+          <Route path={truck} element={<ManageTruck />} />
+          <Route path={worker} element={<ManageWorker />} />
+          <Route path={partner} element={<ManagePartner />} />
+          <Route path={delivery} element={<ManageDelivery />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )
