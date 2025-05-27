@@ -1,18 +1,19 @@
 import { DataTable } from "@/components/BaseDataTable"
 import { Button } from "@/components/ui/button"
-import type { Tienda } from "@/models/store"
 import { useEffect, useMemo, useState } from "react"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowUpDown, Edit2, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { TiendaSheet } from "@/components/TiendaSheet"
 import { AlertDialogDemo } from "@/components/alert"
 import { useModalStore } from "@/hooks/useModalStore"
-import { getTiendas } from "@/http/tienda-service"
 import { normalize } from '@/utils/normalizeText'
+import type { Truck } from "@/models/truck"
+import { getCamion } from "@/http/camion-service"
+import { toast } from "sonner"
+import { TruckSheet } from "@/components/TruckSheet"
 
-const columns = (onOpenModal: (id: string) => void): ColumnDef<Tienda>[] => [
+const columns = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -36,71 +37,80 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Tienda>[] => [
     enableHiding: false,
   },
   {
-    accessorKey: "nombreTienda",
+    accessorKey: "placa",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nombre
+          Placa
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("nombreTienda")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("placa")}</div>,
   },
   {
-    accessorKey: "horario",
-    accessorFn: row => {
-      const formatTime = (time: string) => {
-        const [hours, minutes] = time.split(":");
-        return `${hours}:${minutes}`;
-      }
-      return `${formatTime(row.horarioInicio)} - ${formatTime(row.horarioFin)}`
-    },
+    accessorKey: "codTarjCircu",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Horario
+          Tarjeta de circulación
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("horario")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("codTarjCircu")}</div>,
   },
   {
-    accessorKey: "direccion",
+    accessorKey: "anoFabricacion",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Dirección
+          Año de fabricación
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("direccion")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("anoFabricacion")}</div>,
   },
   {
-    accessorKey: "observacion",
+    accessorKey: "dimensiones",
+    accessorFn: row =>  `${row.altura}(alt) x ${row.longitud}(lon) x ${row.ancho}(ancho)`,
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Observación
+          Dimensiones
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("observacion")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("dimensiones")}</div>,
+  },
+  {
+    accessorKey: "pesoUtil",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Peso útil
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("pesoUtil")}</div>,
   },
   {
     accessorKey: "_",
@@ -131,32 +141,42 @@ const columns = (onOpenModal: (id: string) => void): ColumnDef<Tienda>[] => [
   },
 ]
 
-
-export const ManageStore = () => {
-  const [stores, setStores] = useState<Tienda[]>([])
-  const [storesFilter, setStoresFilter] = useState<Tienda[]>([])
+export const ManageTruck = () => {
+  const [truck, setTruck] = useState<Truck[]>([])
+  const [truckFilter, setTruckFilter] = useState<Truck[]>([])
   const { openModalId, openModal, closeModal } = useModalStore()
   
-  const filteredStores = (value: string) => {
-    const filtered = stores.filter(store =>
-      normalize(store.nombreTienda).includes(normalize(value)) ||
-      normalize(store.codigoTienda).includes(normalize(value)) ||
-      normalize(store.observacion ?? '').includes(normalize(value)) ||
-      normalize(store.direccion).includes(normalize(value))
+  const filteredTruck = (value: string) => {
+    const filtered = truck.filter(t =>
+      normalize(t.placa).includes(normalize(value)) ||
+      normalize(t.codTarjCircu).includes(normalize(value))
     )
-    setStoresFilter(filtered)
+    setTruckFilter(filtered)
   }
 
   const cols = useMemo(() => columns(openModal), [openModal])
 
   useEffect(() => {
-    const fetchStores = async () => {
-      const { data } = await getTiendas()
-      setStores(data)
-      setStoresFilter(data)
+    const fetchTruck = async () => {
+      try {
+        const { data } = await getCamion()
+        setTruck(data)
+        setTruckFilter(data)
+      } catch (error) {
+        console.error("Error fetching trucks:", error)
+        toast("Error del sistema", {
+          description: "No se pudo obtener la información de las unidades",
+          richColors: true,
+          closeButton: true,
+          action: {
+            label: "re-intentar",
+            onClick: () => fetchTruck(),
+          },
+        })
+      }
     }
 
-    fetchStores()
+    fetchTruck()
   }, [])
 
   return (
@@ -167,15 +187,15 @@ export const ManageStore = () => {
             className="max-w-sm"
             onChange={(e) => {
               const value = e.target.value.toLowerCase();
-              filteredStores(value)
+              filteredTruck(value)
             }}
           />
-          <Button onClick={() => openModal("sheet1")}>Agregar tienda</Button>
+          <Button onClick={() => openModal("sheet1")}>Agregar camión</Button>
         </div>
-        <DataTable columns={cols} data={storesFilter} />
-        <TiendaSheet onSave={() => {}} isOpen={openModalId === "sheet1"} closeSheet={closeModal} />
+        <DataTable columns={cols} data={truckFilter} />
+        <TruckSheet onSave={() => {}} isOpen={openModalId === "sheet1"} closeSheet={closeModal} />
         <AlertDialogDemo
-          title="¿Estas seguro que quieres eliminar esta tienda?"
+          title="¿Estas seguro que quieres eliminar el camión?"
           isOpen={openModalId === "dialog1"}
           closeDialog={closeModal}
           action={() => {
