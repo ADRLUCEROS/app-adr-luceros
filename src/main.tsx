@@ -10,6 +10,7 @@ import { ManagePartner } from '@/pages/manage-partner/manage-partner.tsx';
 import { ManageDelivery } from '@/pages/manage-delivery/manage-delivery.tsx';
 
 import { ROUTES } from '@/const/router.ts'
+import { FormTruck } from './pages/manage-truck/form-truck.tsx';
 const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 createRoot(document.getElementById('root')!).render(
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Navigate to='manage-store' replace />} />
           <Route path={store} element={<ManageStore />} />
           <Route path={truck} element={<ManageTruck />} />
+          <Route path={`/form-truck`} element={<FormTruck />} />
           <Route path={worker} element={<ManageWorker />} />
           <Route path={partner} element={<ManagePartner />} />
           <Route path={delivery} element={<ManageDelivery />} />

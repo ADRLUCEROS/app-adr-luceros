@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowUpDown, Edit2, Trash2 } from "lucide-react"
+import { ArrowUpDown, MoreVertical } from "lucide-react"
 import type { Truck } from "@/models/truck"
 import { Badge } from "@/components/ui/badge"
 
-export const columnsTruck = (onOpenModal: (id: string) => void): ColumnDef<Truck>[] => [
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Link } from "react-router"
+
+export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Partial<Truck>) => void): ColumnDef<Truck>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -59,7 +68,7 @@ export const columnsTruck = (onOpenModal: (id: string) => void): ColumnDef<Truck
     cell: ({ row }) => <div className="lowercase text-center">{row.getValue("codTarjCircu")}</div>,
   },
   {
-    accessorKey: "añoFab",
+    accessorKey: "anoFab",
     header: ({ column }) => {
       return (
         <Button
@@ -71,7 +80,7 @@ export const columnsTruck = (onOpenModal: (id: string) => void): ColumnDef<Truck
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("añoFab")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("anoFab")}</div>,
   },
   {
     accessorKey: "dimensiones",
@@ -132,34 +141,46 @@ export const columnsTruck = (onOpenModal: (id: string) => void): ColumnDef<Truck
             return "text-gray-800 bg-gray-100"
         }
       }
-      return <div className={`lowercase text-center`}><Badge className={classByState(estado)}>{estado}</Badge></div>
+      return <div className={`lowercase`}><Badge className={classByState(estado)}>{estado}</Badge></div>
     },
   },
   {
-    accessorKey: "_",
-    header: () => {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
       return (
-        <div>Acción</div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuItem disabled>
+              Ver detalles
+            </DropdownMenuItem>
+            <Link to='/form-truck'>
+              <DropdownMenuItem
+                onClick={() => {
+                  set(row.original)
+                }}
+              >
+                Editar
+              </DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem
+              onClick={() => {
+                set(row.original)
+                onOpenModal("camion-estado-dialog")
+              }}
+            >
+              Cambiar estado
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )
     },
-    cell: ({ row }) => <div className="flex gap-1">
-      <Button
-        variant="outline"
-        onClick={() => {
-          onOpenModal("sheet1")
-        }}
-      >
-        <Edit2/>
-      </Button>
-      <Button
-        variant="destructive"
-        onClick={() => {
-          onOpenModal("dialog1")
-          console.log("Delete", row.original)
-        }}
-      >
-        <Trash2/>
-      </Button>
-    </div>,
   },
 ]

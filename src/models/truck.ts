@@ -1,7 +1,7 @@
 export interface Truck {
-  idUnidad: string;
+  idUnidad: number;
   placa: string;
-  anoFabricacion: number;
+  anoFab: number;
   altura: number;
   ancho: number;
   longitud: number;
@@ -10,5 +10,8 @@ export interface Truck {
   pesoBruto: number;
   metroCubico: number;
   codTarjCircu: string;
-  estado: "Activo" | "Inactivo" | "En Mantenimiento";
+  estado: TruckStatus;
+  idTienda: number;
 }
+
+export type TruckStatus = "activo" | "baja" | "mantenimiento";
