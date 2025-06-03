@@ -1,4 +1,4 @@
-export function normalize(value: string | number): string {
+export function normalizeString(value: string | number): string {
   return String(value)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
