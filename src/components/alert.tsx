@@ -12,11 +12,13 @@ interface BaseAlertProps {
   title: string
   description?: string
   isOpen: boolean
+  btnName?: string
   closeDialog: () => void
   action: () => void
+  children?: React.ReactNode
 }
 
-export function AlertDialogDemo({ title, description = "", isOpen, closeDialog, action }: BaseAlertProps) {
+export function AlertDialogDemo({ title, description = "", isOpen, closeDialog, action, children, btnName = 'Eliminar' }: BaseAlertProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={closeDialog}>
       <AlertDialogContent>
@@ -24,9 +26,10 @@ export function AlertDialogDemo({ title, description = "", isOpen, closeDialog, 
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        <AlertDialogDescription>{children}</AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => action()}>Eliminar</AlertDialogAction>
+          <AlertDialogAction onClick={() => action()}>{btnName}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
