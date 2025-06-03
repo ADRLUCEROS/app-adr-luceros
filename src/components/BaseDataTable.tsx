@@ -43,6 +43,7 @@ type DataTableProps<T> = {
     columnVisibility: VisibilityState
     rowSelection: RowSelectionState
   }>
+  children?: React.ReactNode
 }
 
 export function DataTable<T>({
@@ -51,6 +52,7 @@ export function DataTable<T>({
   isLoading = false,
   pagination = false,
   initialState = {},
+  children,
 }: DataTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>(
     initialState.sorting ?? []
@@ -87,8 +89,9 @@ export function DataTable<T>({
   return (
     <div className="w-full">
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+        { children }
+        <Table className="table-auto">
+          <TableHeader className="bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -104,31 +107,36 @@ export function DataTable<T>({
           <TableBody>
             {
               isLoading ? (
-                [...Array(5)].map((_, i) => <TableRow>
-                  <TableCell key={`loading-table-${i}`} colSpan={columns.length} className="h-24">
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
+                [...Array(5)].map((_, i) => 
+                <TableRow key={`loading-row-${i}`}>
+                {
+                  [...Array(columns.length)].map((_, j) => (
+                    <TableCell key={`loading-cell-${i}-${j}`}>
+                      <Skeleton className="h-4 min-w-2 w-full mb-2" />
+                    </TableCell>
+                  ))
+                }
                 </TableRow>)
               ) : table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() ? "selected" : undefined}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={`row-${row.id}`}
+                    data-state={row.getIsSelected() ? "selected" : undefined}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={`cell-${cell.id}`}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )
+              )
             }
           </TableBody>
         </Table>
@@ -141,10 +149,10 @@ export function DataTable<T>({
               <PaginationPrevious href="#" />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              <PaginationLink href="#" isActive>1</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#" isActive>
+              <PaginationLink href="#">
                 2
               </PaginationLink>
             </PaginationItem>
