@@ -4,6 +4,7 @@ import { Store, Truck, UsersIcon, HeartHandshake, Package2 } from 'lucide-react'
 
 import { ROUTES } from '@/const/router.ts'
 import { Toaster } from './components/ui/sonner'
+import { UserControl } from './components/UserControl'
 const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 interface ButtonSidebarProps {
@@ -24,7 +25,7 @@ function App() {
   return (
     <div className='dashboard'>
       <aside className='flex flex-col gap-1 bg-blue-950 py-5 text-white'>
-        <h2 className='text-2xl px-4'>Gestión</h2>
+        <UserControl/>
         <ButtonSidebar to={store} isActive={pathname.includes(store)}>
           <Store className='inline-block' />
           <span>Gestión tiendas</span>
@@ -46,7 +47,7 @@ function App() {
           <span>Gestión entregas</span>
         </ButtonSidebar>
       </aside>
-      <main className='main-content'>
+      <main className='main-content overflow-x-hidden'>
         <Outlet />
         <Toaster />
       </main>
