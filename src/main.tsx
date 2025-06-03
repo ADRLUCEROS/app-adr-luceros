@@ -2,11 +2,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import App from './App.tsx'
-import { ManageStore } from './pages/manage-store.tsx';
-import { ManageTruck } from './pages/manage-truck.tsx';
-import { ManageWorker } from './pages/manage-worker.tsx';
-import { ManagePartner } from './pages/manage-partner.tsx';
-import { ManageDelivery } from './pages/manage-delivery.tsx';
+
+import { ManageStore } from '@/pages/manage-store/manage-store.tsx';
+import { ManageTruck } from '@/pages/manage-truck/manage-truck.tsx';
+import { ManageWorker } from '@/pages/manage-worker/manage-worker.tsx';
+import { ManagePartner } from '@/pages/manage-partner/manage-partner.tsx';
+import { ManageDelivery } from '@/pages/manage-delivery/manage-delivery.tsx';
 
 import { ROUTES } from '@/const/router.ts'
 const { delivery, partner, store, truck, worker } = ROUTES.manage
