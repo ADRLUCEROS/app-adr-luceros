@@ -18,10 +18,10 @@ export function BaseSheet({ title, description = "", children, isOpen, closeShee
 
   return (
     <Sheet open={isOpen} onOpenChange={closeSheet}>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle><span className="text-2xl">{title}</span></SheetTitle>
-          <SheetDescription>{description}</SheetDescription>
+      <SheetContent className="overflow-y-auto">
+        <SheetHeader className="border-b py-2">
+          <SheetTitle ><span className="text-2xl">{title}</span></SheetTitle>
+          <SheetDescription className={`${description ? '' : 'hidden'}`}>{description}</SheetDescription>
         </SheetHeader>
         {children}
       </SheetContent>
