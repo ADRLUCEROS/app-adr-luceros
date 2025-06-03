@@ -81,7 +81,7 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
         }))
         setBusiness(businessItems)
       } catch (error) {
-        console.log('Error fetching business', error)
+        console.error('Error fetching business', error)
       }
     }
     fetchDepartments()
@@ -126,7 +126,6 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
       body.idEmpresa = idEmpresa
     }
 
-    console.log(body)
     saveTiendas(body).then(() => {
       closed()
       onSave()
