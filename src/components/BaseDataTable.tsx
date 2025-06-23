@@ -88,10 +88,10 @@ export function DataTable<T>({
 
   return (
     <div className="w-full">
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white shadow-sm">
         { children }
         <Table className="table-auto">
-          <TableHeader className="bg-gray-100">
+          <TableHeader className="bg-slate-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
