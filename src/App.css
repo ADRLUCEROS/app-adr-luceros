@@ -12,27 +12,17 @@
   position: relative;
   align-items: center;
 
-  &::before {
-    position: absolute;
-    content: '';
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-  }
-
   &:hover {
-    background-color: #ffffff1a;
+    background-color: #0e44c41a;
   }
 
   &:active {
-    background-color: #00000033;
+    background-color: #0e44c433;
+    scale: 0.98;
   }
 }
 
 .button-sidebar.active {
-  background-color: #00000039;
-  &::before {
-    background-color: #4444f0;
-  }
+  font-weight: 600;
+  background-color: #0e44c439;
 }
