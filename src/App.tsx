@@ -5,6 +5,7 @@ import { Store, Truck, UsersIcon, HeartHandshake, Package2, Bell, LogOut } from 
 import { ROUTES } from '@/const/router.ts'
 import { Toaster } from './components/ui/sonner'
 import { UserControl } from './components/UserControl'
+import { useState } from 'react'
 const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 const OPTIONS_SIDEBAR = [
@@ -48,26 +49,40 @@ interface ButtonSidebarProps {
 }
 
 const ButtonSidebar = ({ to, children, isActive, label }: ButtonSidebarProps) => (
-  <Link to={to} aria-label={label} className={`button-sidebar rounded-md ${isActive ? 'active text-blue-700' : ''}`}>
+  <Link 
+    to={to}
+    aria-label={label}
+    className={`button-sidebar relative rounded-md ${isActive ? 'active text-blue-700' : 'hover:text-blue-500'}`}
+  >
     {children}
   </Link>
 )
 
 function App() {
   const { pathname } = useLocation()
+  const [isHiddenSidebar, setIsHiddenSidebar] = useState(false)
 
   const getTextOfPathname = (path: string) => {
     const option = OPTIONS_SIDEBAR.find(option => path.includes(option.to));
     return option ? option.text : 'No encontrado';
   }
 
+  const handleToggleSidebar = () => {
+    setIsHiddenSidebar(!isHiddenSidebar)
+  }
+
   return (
     <div className='dashboard'>
       <aside className='flex flex-col gap-1 bg-slate-50 py-5 px-2 border-r border-slate-300 relative'>
-        <button className='rounded-full bg-slate-50 border border-slate-300 absolute p-2 right-0 translate-x-1/2 top-0 translate-y-1/5'>
-          <LogOut className='rotate-180'/>
+        <button 
+          className={`rounded-full bg-slate-50 border border-slate-300 p-2 w-fit mx-auto ${ !isHiddenSidebar && 'absolute right-0 translate-x-1/2 top-1'}`}
+          onClick={handleToggleSidebar}
+        >
+          <LogOut className={!isHiddenSidebar ? 'rotate-180' : ''}/>
         </button>
-        <h2 className='text-2xl text-center font-bold'>LOGO</h2>
+        {
+          !isHiddenSidebar && <h2 className='text-2xl text-center font-bold'>LOGO</h2>
+        }
         {
           OPTIONS_SIDEBAR.map((option) => (
             <ButtonSidebar 
@@ -77,7 +92,9 @@ function App() {
               isActive={pathname.includes(option.to)}
             >
               <option.icon className='inline-block' />
-              <span>{option.text}</span>
+              <span className={isHiddenSidebar ? 'absolute text-center hidden left-10/12 ml-2 z-10 bg-black text-white px-2 py-1 rounded-sm text-nowrap' : ''}>
+                {option.text}
+              </span>
             </ButtonSidebar>
           ))
         }

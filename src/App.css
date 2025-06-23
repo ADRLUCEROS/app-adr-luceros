@@ -20,6 +20,9 @@
     background-color: #0e44c433;
     scale: 0.98;
   }
+  &:hover span {
+    display: inline-block;
+  }
 }
 
 .button-sidebar.active {
