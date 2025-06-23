@@ -98,7 +98,7 @@ export const ManageTruck = () => {
         <DataTable columns={cols} data={truckFilter}>
           <div className="p-2 flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <h1 className="text-xl font-semibold">Tiendas</h1>
+              <h1 className="text-xl font-semibold">Unidades</h1>
               <Badge className="ml-2 bg-gray-100" variant='outline'>
                 <span className="rounded-full h-1 w-1 bg-gray-500"/>
                 <span className="text-gray-600">{ truckFilter.length }</span>
@@ -118,7 +118,7 @@ export const ManageTruck = () => {
                 className="border-gray-700 text-gray-700 hover:text-gray-500"
                 disabled
               ><Filter/>Filters</Button>
-              <Link to="/form-truck">
+              <Link to={`./form-truck`}>
                 <Button 
                   variant='outline' 
                   className="border-blue-700 text-blue-700 hover:text-blue-500"

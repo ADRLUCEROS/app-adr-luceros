@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Navigate to='manage-store' replace />} />
           <Route path={store} element={<ManageStore />} />
           <Route path={truck} element={<ManageTruck />} />
-          <Route path={`/form-truck`} element={<FormTruck />} />
+          <Route path={`${truck}/form-truck`} element={<FormTruck />} />
           <Route path={worker} element={<ManageWorker />} />
           <Route path={partner} element={<ManagePartner />} />
           <Route path={delivery} element={<ManageDelivery />} />
