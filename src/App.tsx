@@ -75,7 +75,7 @@ function App() {
     <div className='dashboard'>
       <aside className='flex flex-col gap-1 bg-slate-50 py-5 px-2 border-r border-slate-300 relative'>
         <button 
-          className={`rounded-full bg-slate-50 border border-slate-300 p-2 w-fit mx-auto ${ !isHiddenSidebar && 'absolute right-0 translate-x-1/2 top-1'}`}
+          className={`rounded-full bg-slate-50 border border-slate-300 p-2 w-fit mx-auto ${ !isHiddenSidebar ? 'absolute right-0 translate-x-1/2 top-1' : 'mb-2'}`}
           onClick={handleToggleSidebar}
         >
           <LogOut className={!isHiddenSidebar ? 'rotate-180' : ''}/>
