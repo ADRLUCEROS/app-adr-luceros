@@ -115,18 +115,12 @@ export const ManageStore = () => {
                 variant='outline' 
                 className="border-gray-700 text-gray-700 hover:text-gray-500"
                 disabled
-              ><Filter/>Filters</Button>
+              ><Filter/>Filtrar</Button>
               <Button 
                 variant='outline' 
                 className="border-blue-700 text-blue-700 hover:text-blue-500" 
                 onClick={() => openModal("sheet1")}
-              ><Plus/>Add Tienda</Button>
-              <Button 
-                variant='outline' 
-                className="border-blue-700 text-blue-700 hover:text-blue-500" 
-                onClick={() => openModal("sheet1")} 
-                disabled
-              ><Plus/>Add Empresa</Button>
+              ><Plus/>Agregar</Button>
             </div>
           </div>
         </DataTable>
