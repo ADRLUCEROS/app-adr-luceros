@@ -1,121 +1,94 @@
 import { Button } from "@/components/ui/button"
-import { type ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowUpDown, MoreVertical } from "lucide-react"
-import type { Truck } from "@/models/truck"
-import { Badge } from "@/components/ui/badge"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Link } from "react-router"
 
-export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Partial<Truck>) => void): ColumnDef<Truck>[] => [
+import { type ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown, MoreVertical } from "lucide-react"
+
+import type { Storehouse } from "@/models/storehouse"
+import { Badge } from "@/components/ui/badge"
+
+export const columnsStorehouse = (onOpenModal: (id: string) => void, set: (model: Partial<Storehouse>) => void): ColumnDef<Storehouse>[] => [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+    id: "#",
+    header: () => (
+      <div></div>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
+      <span>{ row.index + 1 }</span>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
-    accessorKey: "placa",
+    accessorKey: "nombreAlmacen",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Placa
+          Nombre
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("placa")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("nombreAlmacen")}</div>,
   },
   {
-    accessorKey: "codTarjCircu",
+    accessorKey: "nombreCliente",
+    accessorFn: row => `${row.clienteCorporativo.nombre}`,
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tarjeta de circulación
+          Cliente
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("codTarjCircu")}</div>,
+    cell: ({ row }) => <div className="capitalize">
+      <Badge className="text-sky-800 bg-sky-100">{row.getValue("nombreCliente")}</Badge>
+    </div>,
   },
   {
-    accessorKey: "anoFab",
+    accessorKey: "ubicación",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Año de fabricación
+          Ubicación
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("anoFab")}</div>,
+    cell: () => <div>Lima</div>,
   },
   {
-    accessorKey: "dimensiones",
-    accessorFn: row =>  `${row.altura}m(alt) x ${row.longitud}m(lon) x ${row.ancho}m(ancho)`,
+    accessorKey: "direccion",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Dimensiones
+          Dirección
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("dimensiones")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("direccion")}</div>,
   },
   {
-    accessorKey: "pesoUtil",
-    accessorFn: row =>  `${row.pesoUtil / 100} T`,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Peso útil
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("pesoUtil")}</div>,
-  },
-  {
-    accessorKey: "estado",
+    accessorKey: "snActivo",
     header: ({ column }) => {
       return (
         <Button
@@ -128,7 +101,7 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
       )
     },
     cell: ({ row }) => {
-      const estado: string = row.getValue("estado")
+      const estado: string = row.getValue("snActivo")
       const objectState = (value: string) => {
         const normalizado = value.toUpperCase()
         switch (normalizado) {
@@ -136,8 +109,6 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
             return { className: "text-green-800 bg-green-100", nombre: "Activo" }
           case "N":
             return { className: "text-red-800 bg-red-100", nombre: "Inactivo" }
-          case "M":
-            return { className: "text-yellow-800 bg-yellow-100", nombre: "Mantenimiento" }
           default:
             return { className: "text-gray-800 bg-gray-100", nombre: "Desconocido" }
         }
@@ -163,22 +134,23 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
             <DropdownMenuItem disabled>
               Ver detalles
             </DropdownMenuItem>
-            <Link to='/form-truck'>
-              <DropdownMenuItem
-                onClick={() => {
-                  set(row.original)
-                }}
-              >
-                Editar
-              </DropdownMenuItem>
-            </Link>
             <DropdownMenuItem
               onClick={() => {
+                onOpenModal("storehouse-sheet")
                 set(row.original)
-                onOpenModal("camion-estado-dialog")
               }}
             >
-              Cambiar estado
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+            variant="destructive"
+              onClick={() => {
+                set(row.original)
+                onOpenModal("storehouse-dialog")
+              }}
+            >
+              Eliminar
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

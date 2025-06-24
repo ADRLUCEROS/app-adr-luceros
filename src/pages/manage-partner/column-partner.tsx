@@ -1,20 +1,21 @@
 import { Button } from "@/components/ui/button"
-import { type ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowUpDown, MoreVertical } from "lucide-react"
-import type { Truck } from "@/models/truck"
-import { Badge } from "@/components/ui/badge"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Link } from "react-router"
 
-export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Partial<Truck>) => void): ColumnDef<Truck>[] => [
+import { type ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown, MoreVertical } from "lucide-react"
+
+import type { Partner } from "@/models/partner"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
+
+export const columnsPartner = (onOpenModal: (id: string) => void, set: (model: Partial<Partner>) => void): ColumnDef<Partner>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -38,81 +39,49 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
     enableHiding: false,
   },
   {
-    accessorKey: "placa",
+    accessorKey: "nombre",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Placa
+          Nombre
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("placa")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("nombre")}</div>,
   },
   {
-    accessorKey: "codTarjCircu",
+    accessorKey: "razonSocial",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tarjeta de circulación
+          Razón Social
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("codTarjCircu")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("razonSocial")}</div>,
   },
   {
-    accessorKey: "anoFab",
+    accessorKey: "direccionFiscal",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Año de fabricación
+          Dirección Fiscal
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("anoFab")}</div>,
-  },
-  {
-    accessorKey: "dimensiones",
-    accessorFn: row =>  `${row.altura}m(alt) x ${row.longitud}m(lon) x ${row.ancho}m(ancho)`,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Dimensiones
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("dimensiones")}</div>,
-  },
-  {
-    accessorKey: "pesoUtil",
-    accessorFn: row =>  `${row.pesoUtil / 100} T`,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Peso útil
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("pesoUtil")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("direccionFiscal")}</div>,
   },
   {
     accessorKey: "estado",
@@ -130,8 +99,8 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
     cell: ({ row }) => {
       const estado: string = row.getValue("estado")
       const objectState = (value: string) => {
-        const normalizado = value.toUpperCase()
-        switch (normalizado) {
+        // const normalizado = value.toUpperCase()
+        switch (value) {
           case "S":
             return { className: "text-green-800 bg-green-100", nombre: "Activo" }
           case "N":
@@ -163,22 +132,23 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
             <DropdownMenuItem disabled>
               Ver detalles
             </DropdownMenuItem>
-            <Link to='/form-truck'>
-              <DropdownMenuItem
-                onClick={() => {
-                  set(row.original)
-                }}
-              >
-                Editar
-              </DropdownMenuItem>
-            </Link>
             <DropdownMenuItem
               onClick={() => {
+                onOpenModal("rol-sheet")
                 set(row.original)
-                onOpenModal("camion-estado-dialog")
               }}
             >
-              Cambiar estado
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+            variant="destructive"
+              onClick={() => {
+                set(row.original)
+                onOpenModal("rol-dialog")
+              }}
+            >
+              Eliminar
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

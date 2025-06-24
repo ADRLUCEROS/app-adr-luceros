@@ -5,5 +5,7 @@ export const ROUTES = {
     worker: '/manage-worker',
     partner: '/manage-partner',
     delivery: '/manage-delivery',
-  }
+  },
+  setting: '/setting',
+  dashboard: '/dashboard',
 }

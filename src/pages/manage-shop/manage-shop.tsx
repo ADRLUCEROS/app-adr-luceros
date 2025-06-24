@@ -10,11 +10,11 @@ import { AlertDialogDemo } from "@/components/alert"
 
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
-import type { Tienda, TiendaList } from "@/models/store"
+import type { Tienda, TiendaList } from "@/models/shop"
 import { deleteTiendas, getTiendas } from "@/http/tienda-service"
 
-import { TiendaSheet } from "./TiendaSheet"
-import { columnsStore } from "./column-store"
+import { TiendaSheet } from "./shopSheet"
+import { columnsStore } from "./column-shop"
 
 import { Plus, Filter } from 'lucide-react'
 import { useTiendaStore } from "@/hooks/useTiendaStore"

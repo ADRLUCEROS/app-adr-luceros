@@ -14,7 +14,7 @@ import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Clock, MoreVertical } from "lucide-react"
 
 import type { Company } from "@/models/company"
-import type { TiendaList } from "@/models/store"
+import type { TiendaList } from "@/models/shop"
 
 export const columnsStore = (onOpenModal: (id: string) => void, set: (tienda: Partial<TiendaList>) => void): ColumnDef<TiendaList>[] => [
   {

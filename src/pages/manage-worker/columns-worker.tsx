@@ -2,8 +2,7 @@ import { Button } from "@/components/ui/button"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowUpDown, MoreVertical } from "lucide-react"
-import type { Truck } from "@/models/truck"
-import { Badge } from "@/components/ui/badge"
+import type { Worker } from "@/models/worker"
 
 import {
   DropdownMenu,
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Link } from "react-router"
 
-export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Partial<Truck>) => void): ColumnDef<Truck>[] => [
+export const columnsWorker = (onOpenModal: (id: string) => void, set: (model: Partial<Worker>) => void): ColumnDef<Worker>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -38,113 +37,116 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
     enableHiding: false,
   },
   {
-    accessorKey: "placa",
+    accessorKey: "nombre_completo",
+    accessorFn: row =>  `${row.nombres} ${row.apellidos}`,
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Placa
+          Nombre Completo
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("placa")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("nombre_completo")}</div>,
   },
   {
-    accessorKey: "codTarjCircu",
+    accessorKey: "correo",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tarjeta de circulación
+          Correo
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("codTarjCircu")}</div>,
+    cell: ({ row }) => <div>{row.getValue("correo")}</div>,
   },
   {
-    accessorKey: "anoFab",
+    accessorKey: "tipoDoc",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Año de fabricación
+          Tipo Doc
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("anoFab")}</div>,
+    cell: () => <div className="uppercase">DNI</div>,
   },
   {
-    accessorKey: "dimensiones",
-    accessorFn: row =>  `${row.altura}m(alt) x ${row.longitud}m(lon) x ${row.ancho}m(ancho)`,
+    accessorKey: "numDoc",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Dimensiones
+          N° Documento
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("dimensiones")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("numDoc")}</div>,
   },
   {
-    accessorKey: "pesoUtil",
-    accessorFn: row =>  `${row.pesoUtil / 100} T`,
+    accessorKey: "cargo_trabajo",
+    accessorFn: row =>  `${row.cargos.nombre_cargo}`,
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Peso útil
+          Cargo
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("pesoUtil")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("cargo_trabajo")}</div>,
   },
   {
-    accessorKey: "estado",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Estado
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      const estado: string = row.getValue("estado")
-      const objectState = (value: string) => {
-        const normalizado = value.toUpperCase()
-        switch (normalizado) {
-          case "S":
-            return { className: "text-green-800 bg-green-100", nombre: "Activo" }
-          case "N":
-            return { className: "text-red-800 bg-red-100", nombre: "Inactivo" }
-          case "M":
-            return { className: "text-yellow-800 bg-yellow-100", nombre: "Mantenimiento" }
-          default:
-            return { className: "text-gray-800 bg-gray-100", nombre: "Desconocido" }
+    accessorKey: "fechaNac",
+    accessorFn: row =>  {
+      const [year, month, day] = row.fechaNac.split("-")
+      const monthString = (month: number) => {
+        switch (month) {
+          case 1: return "Ene";
+          case 2: return "Feb";
+          case 3: return "Mar";
+          case 4: return "Abr";
+          case 5: return "May";
+          case 6: return "Jun";
+          case 7: return "Jul";
+          case 8: return "Ago";
+          case 9: return "Sep";
+          case 10: return "Oct";
+          case 11: return "Nov";
+          case 12: return "Dic";
         }
       }
-      const { className, nombre } = objectState(estado)
-      return <div className={`lowercase`}><Badge className={className}>{nombre}</Badge></div>
+      return `${day} ${monthString(parseInt(month))}. ${year}`
     },
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Fecha Nac
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div>{row.getValue("fechaNac")}</div>,
   },
   {
     id: "actions",
@@ -175,10 +177,10 @@ export const columnsTruck = (onOpenModal: (id: string) => void, set: (tienda: Pa
             <DropdownMenuItem
               onClick={() => {
                 set(row.original)
-                onOpenModal("camion-estado-dialog")
+                onOpenModal("colaborador-rol-dialog")
               }}
             >
-              Cambiar estado
+              Cambiar rol
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

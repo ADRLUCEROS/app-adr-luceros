@@ -1,14 +1,31 @@
 import { Link, Outlet, useLocation } from 'react-router'
 import './App.css'
-import { Store, Truck, UsersIcon, HeartHandshake, Package2, Bell, LogOut } from 'lucide-react'
+import { 
+  Store,
+  Truck,
+  UsersIcon,
+  HeartHandshake,
+  Package2,
+  Bell,
+  LogOut,
+  LayoutDashboard,
+  Settings
+} from 'lucide-react'
 
 import { ROUTES } from '@/const/router.ts'
 import { Toaster } from './components/ui/sonner'
 import { UserControl } from './components/UserControl'
 import { useState } from 'react'
+const { setting, dashboard } = ROUTES
 const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 const OPTIONS_SIDEBAR = [
+  { 
+    to: dashboard,
+    icon: LayoutDashboard,
+    label: 'Dashboard',
+    text: 'Dashboard',
+  },
   { 
     to: store,
     icon: Store,
@@ -30,14 +47,20 @@ const OPTIONS_SIDEBAR = [
   { 
     to: partner,
     icon: HeartHandshake,
-    label: 'Gestión socios',
-    text: 'Gestión socios',
+    label: 'Gestión clientes',
+    text: 'Gestión clientes',
   },
   { 
     to: delivery,
     icon: Package2,
     label: 'Gestión entregas',
     text: 'Gestión entregas',
+  },
+  { 
+    to: setting,
+    icon: Settings,
+    label: 'Configuración',
+    text: 'Configuración',
   },
 ]
 

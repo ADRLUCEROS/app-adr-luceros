@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { getBusiness } from '@/http/business-service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { storeSchema } from '@/validations/store-schema'
-import type { Tienda, TiendaList } from '@/models/store'
+import type { Tienda, TiendaList } from '@/models/shop'
 import { saveTiendas } from '@/http/tienda-service'
 import { toast } from 'sonner'
 import { useTiendaStore } from '@/hooks/useTiendaStore'

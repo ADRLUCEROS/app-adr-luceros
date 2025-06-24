@@ -1,4 +1,4 @@
-import type { TiendaList } from "@/models/store"
+import type { TiendaList } from "@/models/shop"
 import { create } from "zustand"
 
 type TiendaState = {

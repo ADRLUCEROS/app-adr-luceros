@@ -10,38 +10,37 @@ import { DataTable } from "@/components/BaseDataTable"
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
 
-import { columnsPartner } from "./column-partner"
+import { columnsStorehouse } from "./column-storehouse"
 
 import { Plus, Filter } from 'lucide-react'
-import { usePartnerStore } from "@/hooks/usePartnerStore"
-import type { Partner } from "@/models/partner"
-import { getPartners } from "@/http/partner-service"
+import { useStorehouseStore } from "@/hooks/useStorehouseStore"
+import type { Storehouse } from "@/models/storehouse"
+import { getStorehouses } from "@/http/storehouse-service"
 
-export const ManagePartner = () => {
-  const { setPartnerSelected } = usePartnerStore()
-  const [partner, setPartner] = useState<Partner[]>([])
+export const ManageStorehouse = () => {
+  const { setStorehouseSelected } = useStorehouseStore()
+  const [Storehouse, setStorehouse] = useState<Storehouse[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [partnerFilter, setPartnerFilter] = useState<Partner[]>([])
+  const [StorehouseFilter, setStorehouseFilter] = useState<Storehouse[]>([])
   const { openModal } = useModalStore()
   
-  const filteredPartner = (value: string) => {
-    const filtered = partner.filter(p =>
-      normalizeString(p.nombre).includes(normalizeString(value)) ||
-      normalizeString(p.razonSocial).includes(normalizeString(value)) ||
-      normalizeString(p.direccionFiscal).includes(normalizeString(value))
-      // normalizeString(p.empresa.razonSocial).includes(normalizeString(value))
+  const filteredStorehouse = (value: string) => {
+    const filtered = Storehouse.filter(r =>
+      normalizeString(r.nombreAlmacen).includes(normalizeString(value)) ||
+      normalizeString(r.clienteCorporativo.nombre).includes(normalizeString(value)) ||
+      normalizeString(r.direccion).includes(normalizeString(value))
     )
-    setPartnerFilter(filtered)
+    setStorehouseFilter(filtered)
   }
 
-  const cols = useMemo(() => columnsPartner(openModal, setPartnerSelected), [openModal, setPartnerSelected])
+  const cols = useMemo(() => columnsStorehouse(openModal, setStorehouseSelected), [openModal, setStorehouseSelected])
 
-  const fetchPartner = async () => {
+  const fetchStorehouse = async () => {
     setIsLoading(true)
     try {
-      const { data } = await getPartners()
-      setPartner(data)
-      setPartnerFilter(data)
+      const { data } = await getStorehouses()
+      setStorehouse(data)
+      setStorehouseFilter(data)
     } catch {
       toast.error("Error del servidor", {
         description: "No se pudo obtener la información de las tiendas",
@@ -55,18 +54,18 @@ export const ManagePartner = () => {
   }
 
   useEffect(() => {
-    fetchPartner()
+    fetchStorehouse()
   }, [])
 
   return (
     <div className="mx-4 my-2">
-        <DataTable isLoading={isLoading} columns={cols} data={partnerFilter}>
+        <DataTable isLoading={isLoading} columns={cols} data={StorehouseFilter}>
           <div className="p-2 flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <h1 className="text-xl font-semibold">Clientes corporativos</h1>
+              <h1 className="text-xl font-semibold">Cargos</h1>
               <Badge className="ml-2 bg-gray-100" variant='outline'>
                 <span className="rounded-full h-1 w-1 bg-gray-500"/>
-                <span className="text-gray-600">{ partnerFilter.length }</span>
+                <span className="text-gray-600">{ StorehouseFilter.length }</span>
               </Badge>
             </div>
             <div className="flex items-center gap-2">
@@ -75,7 +74,7 @@ export const ManagePartner = () => {
                 className="max-w-sm"
                 onChange={(e) => {
                   const value = e.target.value.toLowerCase();
-                  filteredPartner(value)
+                  filteredStorehouse(value)
                 }}
               />
               <Button 

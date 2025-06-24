@@ -117,13 +117,13 @@ export const ManageTruck = () => {
                 variant='outline' 
                 className="border-gray-700 text-gray-700 hover:text-gray-500"
                 disabled
-              ><Filter/>Filters</Button>
+              ><Filter/>Filtros</Button>
               <Link to={`./form-truck`}>
                 <Button 
                   variant='outline' 
                   className="border-blue-700 text-blue-700 hover:text-blue-500"
                   onClick={() => setTruckSelected(null)}
-                ><Plus/>Add Unidad</Button>
+                ><Plus/>Agregar</Button>
               </Link>
             </div>
           </div>

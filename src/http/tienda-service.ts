@@ -1,4 +1,4 @@
-import type { Tienda, TiendaList } from "@/models/store";
+import type { Tienda, TiendaList } from "@/models/shop";
 import { http } from "./http-service";
 
 export const getTiendas = async () => {
