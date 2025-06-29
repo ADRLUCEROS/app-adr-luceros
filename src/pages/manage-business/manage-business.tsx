@@ -18,13 +18,16 @@ import { Plus, Filter } from 'lucide-react'
 import type { Business } from "@/models/business"
 import { getBusiness } from "@/http/business-service"
 import { Skeleton } from "@/components/ui/skeleton"
+import { BusinessSheet } from "./business-sheet"
+import { useBusinessStore } from "@/hooks/useBusinessStore"
+import { useModalStore } from "@/hooks/useModalStore"
 
 export const ManageBusiness = () => {
-  // const { setTienda, tiendaSeleccionada } = useTiendaStore()
+  const { businessSelected, setBusinessSelected } = useBusinessStore()
   const [business, setBusiness] = useState<Business[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [businessFilter, setBusinessFilter] = useState<Business[]>([])
-  // const { openModalId, openModal, closeModal } = useModalStore()
+  const { openModalId, openModal, closeModal } = useModalStore()
   
   const filteredStores = (value: string) => {
     const filtered = business.filter(b =>
@@ -34,7 +37,7 @@ export const ManageBusiness = () => {
     setBusinessFilter(filtered)
   }
 
-  const fetchStores = async () => {
+  const fetchBusiness = async () => {
     setIsLoading(true)
     try {
       const { data } = await getBusiness()
@@ -52,8 +55,13 @@ export const ManageBusiness = () => {
     }
   }
 
+  const openBusinessSheet = (item?: Partial<Business>) => {
+    setBusinessSelected(item || {})
+    openModal("business-sheet-form")
+  }
+
   useEffect(() => {
-    fetchStores()
+    fetchBusiness()
   }, [])
 
   return (
@@ -76,7 +84,7 @@ export const ManageBusiness = () => {
           <Button 
             variant='outline' 
             className="border-blue-700 text-blue-700 hover:text-blue-500" 
-            // onClick={() => openModal("sheet1")}
+            onClick={() => openBusinessSheet()}
           ><Plus/>Agregar</Button>
         </div>
       </div>
@@ -96,13 +104,14 @@ export const ManageBusiness = () => {
                 <article key={b.ruc} className="bg-white p-4 rounded-lg shadow">
                   <h3 className="text-2xl font-semibold mb-2">{b.razonSocial}</h3>
                   <p className="mb-2">RUC: <strong>{b.ruc}</strong></p>
-                  <Button variant='outline' className="ml-full">Editar</Button>
+                  <Button variant='outline' className="ml-full" onClick={() => openBusinessSheet(b)}>Editar</Button>
                 </article>
               ))
             )
           )
         }
       </div>
+      <BusinessSheet onSave={fetchBusiness} isOpen={openModalId === "business-sheet-form"} closeSheet={closeModal} itemSelected={businessSelected} />
     </div>
   )
 }

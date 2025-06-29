@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { AlertDialogDemo } from "@/components/alert"
+import { AlertConfirm } from "@/components/AlertConfirm"
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
 import { toast } from "sonner"
@@ -125,7 +125,7 @@ export const ManageWorker = () => {
                 className="border-gray-700 text-gray-700 hover:text-gray-500"
                 disabled
               ><Filter/>Filtros</Button>
-              <Link to={`./form-worker`}>
+              <Link to={`./form`}>
                 <Button 
                   variant='outline' 
                   className="border-blue-700 text-blue-700 hover:text-blue-500"
@@ -135,7 +135,7 @@ export const ManageWorker = () => {
             </div>
           </div>
         </DataTable>
-        <AlertDialogDemo
+        <AlertConfirm
           title={`Cambiar el cargo de ${workerSelected?.nombres} ${workerSelected?.apellidos}`}
           isOpen={openModalId === "colaborador-rol-dialog"}
           closeDialog={closeModal}
@@ -154,7 +154,7 @@ export const ManageWorker = () => {
               <SelectItem value="activo">activo</SelectItem>
             </SelectContent>
           </Select>
-        </AlertDialogDemo>
+        </AlertConfirm>
     </div>
   )
 }

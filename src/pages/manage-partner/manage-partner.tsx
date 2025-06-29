@@ -16,13 +16,15 @@ import { Plus, Filter } from 'lucide-react'
 import { usePartnerStore } from "@/hooks/usePartnerStore"
 import type { Partner } from "@/models/partner"
 import { getPartners } from "@/http/partner-service"
+import { PartnerSheet } from "./partnerSheet"
+import { AlertConfirm } from "@/components/AlertConfirm"
 
 export const ManagePartner = () => {
-  const { setPartnerSelected } = usePartnerStore()
+  const { setPartnerSelected, partnerSelected } = usePartnerStore()
   const [partner, setPartner] = useState<Partner[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [partnerFilter, setPartnerFilter] = useState<Partner[]>([])
-  const { openModal } = useModalStore()
+  const { openModal, closeModal, openModalId } = useModalStore()
   
   const filteredPartner = (value: string) => {
     const filtered = partner.filter(p =>
@@ -52,6 +54,11 @@ export const ManagePartner = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const openModalSheet = () => {
+    setPartnerSelected(null)
+    openModal("partner-sheet-form")
   }
 
   useEffect(() => {
@@ -86,18 +93,24 @@ export const ManagePartner = () => {
               <Button 
                 variant='outline' 
                 className="border-blue-700 text-blue-700 hover:text-blue-500" 
-                onClick={() => openModal("sheet1")}
+                onClick={openModalSheet}
               ><Plus/>Agregar</Button>
             </div>
           </div>
         </DataTable>
-        {/* <TiendaSheet onSave={fetchStores} isOpen={openModalId === "sheet1"} closeSheet={closeModal} tiendaSeleccionada={tiendaSeleccionada} />
-        <AlertDialogDemo
+        <PartnerSheet
+          onSave={fetchPartner}
+          isOpen={openModalId === "partner-sheet-form"}
+          closeSheet={closeModal}
+          itemSelected={partnerSelected}
+        />
+        <AlertConfirm
           title="¿Estas seguro que quieres eliminar esta tienda?"
-          isOpen={openModalId === "dialog1"}
+          isOpen={openModalId === "partner-dialog-delete"}
+          variant="destructive"
           closeDialog={closeModal}
-          action={deleteTienda}
-        /> */}
+          action={() => {}}
+        />
     </div>
   )
 }

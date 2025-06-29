@@ -11,10 +11,10 @@ import {
 import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreVertical } from "lucide-react"
 
-import type { Storehouse } from "@/models/storehouse"
+import type { Warehouse } from "@/models/warehouse"
 import { Badge } from "@/components/ui/badge"
 
-export const columnsStorehouse = (onOpenModal: (id: string) => void, set: (model: Partial<Storehouse>) => void): ColumnDef<Storehouse>[] => [
+export const columnsWarehouse = (onOpenModal: (id: string) => void, set: (model: Partial<Warehouse>) => void): ColumnDef<Warehouse>[] => [
   {
     id: "#",
     header: () => (
@@ -136,7 +136,7 @@ export const columnsStorehouse = (onOpenModal: (id: string) => void, set: (model
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                onOpenModal("storehouse-sheet")
+                onOpenModal("warehouse-sheet-form")
                 set(row.original)
               }}
             >
@@ -147,7 +147,7 @@ export const columnsStorehouse = (onOpenModal: (id: string) => void, set: (model
             variant="destructive"
               onClick={() => {
                 set(row.original)
-                onOpenModal("storehouse-dialog")
+                onOpenModal("warehouse-dialog-delete")
               }}
             >
               Eliminar

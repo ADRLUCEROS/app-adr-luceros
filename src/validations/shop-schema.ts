@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const storeSchema = z.object({
+export const shopSchema = z.object({
   nombreTienda: z.string().min(1,'el nombre de tienda es requerido'),
   horarioInicio: z.string().min(1, 'la ventana horaria es requerido'),
   horarioFin: z.string().min(1, 'la ventana horaria es requerido'),

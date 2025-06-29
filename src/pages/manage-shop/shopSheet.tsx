@@ -11,7 +11,7 @@ import type { Department, District, Province } from "@/models/location"
 import { Textarea } from "@/components/ui/textarea"
 import { getBusiness } from '@/http/business-service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { storeSchema } from '@/validations/store-schema'
+import { shopSchema } from '@/validations/shop-schema'
 import type { Tienda, TiendaList } from '@/models/shop'
 import { saveTiendas } from '@/http/tienda-service'
 import { toast } from 'sonner'
@@ -47,7 +47,7 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
   // })
 
   const { register, handleSubmit, formState: {errors}, setValue, reset } = useForm({
-    resolver: zodResolver(storeSchema),
+    resolver: zodResolver(shopSchema),
   })
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
       setValue("observacion", tiendaSeleccionada.observacion || '');
       if (tiendaSeleccionada.empresa) setSelectedBusiness(tiendaSeleccionada.empresa?.idEmpresa || '');
     } else {
-      reset(); // Resetear los campos si no hay tienda seleccionada
+      reset(); 
     }
   }, [tiendaSeleccionada, setValue, reset]);
 

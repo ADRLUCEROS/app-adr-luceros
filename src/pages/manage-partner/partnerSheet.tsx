@@ -4,133 +4,49 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { BaseSheet } from "@/components/BaseSheet"
-import { BaseCombobox, type ItemCombobox } from "@/components/BaseCombobox"
-import { useEffect, useState } from "react"
-import { getDepartments, getDistricts, getProvinces } from "@/http/location-service"
-import type { Department, District, Province } from "@/models/location"
-import { Textarea } from "@/components/ui/textarea"
-import { getBusiness } from '@/http/business-service'
+import { useEffect } from "react"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { storeSchema } from '@/validations/store-schema'
-import type { Tienda, TiendaList } from '@/models/shop'
-import { saveTiendas } from '@/http/tienda-service'
+import { savePartner } from '@/http/partner-service'
 import { toast } from 'sonner'
-import { useTiendaStore } from '@/hooks/useTiendaStore'
+import { usePartnerStore } from '@/hooks/usePartnerStore'
+import type { PartnerSaveRequest } from '@/models/partner'
+import { partnerSchema } from '@/validations/partner-schema'
 
-interface TiendaSheetProps {
+interface PartnerSheetProps {
   onSave: () => void
   isOpen: boolean
   closeSheet: () => void
-  tiendaSeleccionada?: Partial<TiendaList> | null
+  itemSelected?: Partial<PartnerSaveRequest> | null
 }
 
-export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: TiendaSheetProps) {
-  const { setTienda } = useTiendaStore()
-  const [business, setBusiness] = useState<ItemCombobox[]>([])
-  const [selectedBusiness, setSelectedBusiness] = useState<string | number>("")
-
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [selectedDepartment, setSelectedDepartment] = useState<string | number>("")
-  
-  const [provinces, setProvinces] = useState<Province[]>([])
-  const [selectedProvince, setSelectedProvince] = useState<string | number>("")
-  
-  const [districts, setDistricts] = useState<District[]>([])
-  const [selectedDistrict, setSelectedDistrict] = useState<string | number>("")
-
-  // const [formValues, setFormValues] = useState<FieldValues>({
-  //   nombreTienda: '',
-  //   direccion: '',
-  //   horarioInicio: '',
-  //   horarioFin: '',
-  //   observacion: '',
-  // })
+export function PartnerSheet({ onSave, isOpen, closeSheet, itemSelected }: PartnerSheetProps) {
+  const { setPartnerSelected, partnerSelected } = usePartnerStore()
 
   const { register, handleSubmit, formState: {errors}, setValue, reset } = useForm({
-    resolver: zodResolver(storeSchema),
+    resolver: zodResolver(partnerSchema),
   })
 
   useEffect(() => {
-    if (tiendaSeleccionada) {
-      setValue("nombreTienda", tiendaSeleccionada.nombreTienda || '');
-      setValue("direccion", tiendaSeleccionada.direccion || '');
-      setValue("horarioInicio", tiendaSeleccionada.horarioInicio || '');
-      setValue("horarioFin", tiendaSeleccionada.horarioFin || '');
-      setValue("observacion", tiendaSeleccionada.observacion || '');
-      if (tiendaSeleccionada.empresa) setSelectedBusiness(tiendaSeleccionada.empresa?.idEmpresa || '');
-    } else {
-      reset(); // Resetear los campos si no hay tienda seleccionada
+    if (itemSelected) {
+      setValue("razonSocial", itemSelected.razonSocial || '')
+      setValue("nombre", itemSelected.nombre || '')
+      setValue("direccionFiscal", itemSelected.direccionFiscal || '')
+      return
     }
-  }, [tiendaSeleccionada, setValue, reset]);
-
-  useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const response = await getDepartments()
-        setDepartments(response.data)
-      } catch (error) {
-        console.error("Error fetching departments:", error)
-      }
-    }
-    const fetchBusiness = async () => {
-      try {
-        const response = await getBusiness()
-        const businessItems: ItemCombobox[] = response.data.map((b) => ({
-          id: b.idEmpresa,
-          name: `${b.razonSocial} (${b.ruc})`,
-        }))
-        setBusiness(businessItems)
-      } catch (error) {
-        console.error('Error fetching business', error)
-      }
-    }
-    fetchDepartments()
-    fetchBusiness()
-  },[])
-
-  useEffect(() => {
-    setSelectedProvince("")
-    setSelectedDistrict("")
-    const fetchProvince = async () => {
-      try {
-        const response = await getProvinces(selectedDepartment as string)
-        setProvinces(response)
-      } catch (error) {
-        console.error("Error fetching departments:", error)
-      }
-    }
-    fetchProvince()
-  },[selectedDepartment])
-
-  useEffect(() => {
-    setSelectedDistrict("")
-    const fetchDistricts = async () => {
-      try {
-        const response = await getDistricts(selectedProvince as string, selectedDepartment as string)
-        setDistricts(response)
-      } catch (error) {
-        console.error("Error fetching departments:", error)
-      }
-    }
-    fetchDistricts()
-  },[selectedProvince, selectedDepartment])
+    reset();
+  }, [itemSelected, setValue, reset]);
 
   const handleStoreSubmit = (data: FieldValues) => {
-    const body: Partial<Tienda> = {
-      ...tiendaSeleccionada, 
+    const body: Partial<PartnerSaveRequest> = {
+      ...itemSelected, 
       ...data,
     }
 
-    if (typeof selectedBusiness  === 'number') {
-      const idEmpresa = selectedBusiness
-      body.idEmpresa = idEmpresa
-    }
-
-    saveTiendas(body).then(() => {
+    savePartner(body).then(() => {
       closed()
       onSave()
       toast.success('Operación exitosa', {
-        description: "La tienda se ha guardado correctamente.",
+        description: "La Storehouse se ha guardado correctamente.",
         richColors: true,
         closeButton: true,
         icon: "✅",
@@ -139,7 +55,7 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
     .catch((error) => {
       console.error("Error saving store:", error)
       toast.error('Error del servidor', {
-        description: "No se pudo guardar la tienda.",
+        description: "No se pudo guardar la Storehouse.",
         richColors: true,
         closeButton: true,
         icon: "🚨",
@@ -148,114 +64,46 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
   }
 
   const closed = () => {
-    setTienda(null)
+    setPartnerSelected(null)
     closeSheet()
   }
 
   return (
-    <BaseSheet title={tiendaSeleccionada ? "Editar Tienda" : "Registrar Tienda"} isOpen={isOpen} closeSheet={closed}>
+    <BaseSheet title={partnerSelected ? "Editar cliente corporativo" : "Registrar cliente corporativo"} isOpen={isOpen} closeSheet={closed}>
       <form onSubmit={handleSubmit((data) => handleStoreSubmit(data))}>
        <div className="grid gap-4 px-4">
-          <div className="grid items-center gap-2">
+        <div className="grid items-center gap-2">
             <Label htmlFor="name" className="text-right">
-              Nombre de tienda
+              Nombre cliente corporativo
             </Label>
             <Input 
               id="name" 
-              className={` ${errors.nombreTienda && 'border-red-500'}`} 
-              {...register('nombreTienda')}
+              className={` ${errors.nombre && 'border-red-500'}`} 
+              {...register('nombre')}
             />
-            {errors.nombreTienda && <p className='text-red-800 text-sm'>{errors.nombreTienda.message}</p>}
+            {errors.nombre && <p className='text-red-800 text-sm'>{errors.nombre.message}</p>}
           </div>
           <div className="grid items-center gap-2">
-            <Label htmlFor="departamento" className="text-right">
-              Departamento
+            <Label htmlFor="name" className="text-right">
+              Razón Social
             </Label>
-            <BaseCombobox className=" w-auto" classNameContent="w-full"
-              items={departments}
-              value={selectedDepartment}
-              onChange={setSelectedDepartment}
-              placeholder="Departamento..."
+            <Input 
+              id="name" 
+              className={` ${errors.razonSocial && 'border-red-500'}`} 
+              {...register('razonSocial')}
             />
-          </div>
-          <div className="grid items-center gap-2">
-            <Label htmlFor="distrito" className="text-right">
-              Provincia
-            </Label>
-            <BaseCombobox className=" w-auto" classNameContent="w-full"
-              items={provinces}
-              value={selectedProvince}
-              onChange={setSelectedProvince}
-              isDisabled={!selectedDepartment}
-              placeholder="Provincia..."
-            />
-          </div>
-          <div className="grid items-center gap-2">
-            <Label htmlFor="distrito" className="text-right">
-              Distrito
-            </Label>
-            <BaseCombobox className=" w-auto" classNameContent="w-full"
-              items={districts}
-              value={selectedDistrict}
-              onChange={setSelectedDistrict}
-              isDisabled={!selectedProvince || !selectedDepartment}
-              placeholder="Distrito..."
-            />
+            {errors.razonSocial && <p className='text-red-800 text-sm'>{errors.razonSocial.message}</p>}
           </div>
           <div className="grid items-center gap-2">
             <Label htmlFor="address" className="text-right">
-              Dirección
+              Dirección Fiscal
             </Label>
             <Input 
               id="address" 
-              className={` ${errors.direccion && 'border-red-500'}`} 
-              {...register('direccion')}
+              className={` ${errors.direccionFiscal && 'border-red-500'}`} 
+              {...register('direccionFiscal')}
             />
-            {errors.direccion && <p className='text-red-800 text-sm'>{errors.direccion.message}</p>}
-          </div>
-          <div className="grid items-center gap-2">
-            <Label className="text-right">
-              Horario de atención
-            </Label>
-            <div className=" flex items-center gap-2">
-              <Input 
-                type="time" 
-                className={`w-fit rounded-full ${errors.horarioInicio && 'border-red-500'}`} 
-                {...register('horarioInicio')}
-              />
-              -
-              <Input 
-                type="time" 
-                className={`w-fit rounded-full ${errors.horarioFin && 'border-red-500'}`} 
-                {...register('horarioFin')}
-              />
-            </div>
-            {
-              errors.horarioInicio ? 
-              <p className='text-red-800 text-sm'>{errors.horarioInicio.message}</p> 
-              : (errors.horarioFin && <p className='text-red-800 text-sm'>{errors.horarioFin.message}</p>)
-            }
-          </div>
-          <div className="grid items-center gap-2">
-            <Label htmlFor="observación" className="text-right">
-              Observación
-            </Label>
-            <Textarea 
-              id="observación" 
-              placeholder="Type your message here." 
-              {...register('observacion')}
-            />
-          </div>
-          <div className="grid items-center gap-2">
-            <Label htmlFor="distrito" className="text-right">
-              Empresa
-            </Label>
-            <BaseCombobox className=" w-auto" classNameContent="w-full"
-              items={business}
-              value={selectedBusiness}
-              onChange={setSelectedBusiness}
-              placeholder="Empresa..."
-            />
+            {errors.direccionFiscal && <p className='text-red-800 text-sm'>{errors.direccionFiscal.message}</p>}
           </div>
         </div>
         <SheetFooter>

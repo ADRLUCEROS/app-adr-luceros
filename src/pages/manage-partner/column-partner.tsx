@@ -99,8 +99,9 @@ export const columnsPartner = (onOpenModal: (id: string) => void, set: (model: P
     cell: ({ row }) => {
       const estado: string = row.getValue("estado")
       const objectState = (value: string) => {
-        // const normalizado = value.toUpperCase()
-        switch (value) {
+        if(!value) return { className: "text-gray-800 bg-gray-100", nombre: "Desconocido" }
+        const normalizado = value.toUpperCase()
+        switch (normalizado) {
           case "S":
             return { className: "text-green-800 bg-green-100", nombre: "Activo" }
           case "N":
@@ -134,7 +135,7 @@ export const columnsPartner = (onOpenModal: (id: string) => void, set: (model: P
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                onOpenModal("rol-sheet")
+                onOpenModal("partner-sheet-form")
                 set(row.original)
               }}
             >
@@ -145,7 +146,7 @@ export const columnsPartner = (onOpenModal: (id: string) => void, set: (model: P
             variant="destructive"
               onClick={() => {
                 set(row.original)
-                onOpenModal("rol-dialog")
+                onOpenModal("partner-dialog-delete")
               }}
             >
               Eliminar

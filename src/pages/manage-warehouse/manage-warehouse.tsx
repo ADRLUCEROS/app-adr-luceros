@@ -10,37 +10,39 @@ import { DataTable } from "@/components/BaseDataTable"
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
 
-import { columnsStorehouse } from "./column-storehouse"
+import { columnsWarehouse } from "./column-warehouse"
 
 import { Plus, Filter } from 'lucide-react'
-import { useStorehouseStore } from "@/hooks/useStorehouseStore"
-import type { Storehouse } from "@/models/storehouse"
-import { getStorehouses } from "@/http/storehouse-service"
+import { useWarehouseStore } from "@/hooks/useWarehouseStore"
+import type { Warehouse } from "@/models/warehouse"
+import { getWarehouses } from "@/http/warehouse-service"
+import { WarehouseSheet } from "./warehouseSheet"
+import { AlertConfirm } from "@/components/AlertConfirm"
 
-export const ManageStorehouse = () => {
-  const { setStorehouseSelected } = useStorehouseStore()
-  const [Storehouse, setStorehouse] = useState<Storehouse[]>([])
+export const ManageWarehouse = () => {
+  const { setWarehouseSelected, warehouseSelected } = useWarehouseStore()
+  const [warehouse, setWarehouse] = useState<Warehouse[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [StorehouseFilter, setStorehouseFilter] = useState<Storehouse[]>([])
-  const { openModal } = useModalStore()
+  const [warehouseFilter, setWarehouseFilter] = useState<Warehouse[]>([])
+  const { openModalId, openModal, closeModal } = useModalStore()
   
   const filteredStorehouse = (value: string) => {
-    const filtered = Storehouse.filter(r =>
+    const filtered = warehouse.filter(r =>
       normalizeString(r.nombreAlmacen).includes(normalizeString(value)) ||
       normalizeString(r.clienteCorporativo.nombre).includes(normalizeString(value)) ||
       normalizeString(r.direccion).includes(normalizeString(value))
     )
-    setStorehouseFilter(filtered)
+    setWarehouseFilter(filtered)
   }
 
-  const cols = useMemo(() => columnsStorehouse(openModal, setStorehouseSelected), [openModal, setStorehouseSelected])
+  const cols = useMemo(() => columnsWarehouse(openModal, setWarehouseSelected), [openModal, setWarehouseSelected])
 
-  const fetchStorehouse = async () => {
+  const fetchWarehouse = async () => {
     setIsLoading(true)
     try {
-      const { data } = await getStorehouses()
-      setStorehouse(data)
-      setStorehouseFilter(data)
+      const { data } = await getWarehouses()
+      setWarehouse(data)
+      setWarehouseFilter(data)
     } catch {
       toast.error("Error del servidor", {
         description: "No se pudo obtener la información de las tiendas",
@@ -53,19 +55,24 @@ export const ManageStorehouse = () => {
     }
   }
 
+  const onOpenModal = () => {
+    setWarehouseSelected(null)
+    openModal("warehouse-sheet-form")
+  }
+
   useEffect(() => {
-    fetchStorehouse()
+    fetchWarehouse()
   }, [])
 
   return (
     <div className="mx-4 my-2">
-        <DataTable isLoading={isLoading} columns={cols} data={StorehouseFilter}>
+        <DataTable isLoading={isLoading} columns={cols} data={warehouseFilter}>
           <div className="p-2 flex items-center justify-between">
             <div className="flex items-center gap-1">
               <h1 className="text-xl font-semibold">Cargos</h1>
               <Badge className="ml-2 bg-gray-100" variant='outline'>
                 <span className="rounded-full h-1 w-1 bg-gray-500"/>
-                <span className="text-gray-600">{ StorehouseFilter.length }</span>
+                <span className="text-gray-600">{ warehouseFilter.length }</span>
               </Badge>
             </div>
             <div className="flex items-center gap-2">
@@ -85,18 +92,20 @@ export const ManageStorehouse = () => {
               <Button 
                 variant='outline' 
                 className="border-blue-700 text-blue-700 hover:text-blue-500" 
-                onClick={() => openModal("sheet1")}
+                onClick={onOpenModal}
               ><Plus/>Agregar</Button>
             </div>
           </div>
         </DataTable>
-        {/* <TiendaSheet onSave={fetchStores} isOpen={openModalId === "sheet1"} closeSheet={closeModal} tiendaSeleccionada={tiendaSeleccionada} />
-        <AlertDialogDemo
-          title="¿Estas seguro que quieres eliminar esta tienda?"
-          isOpen={openModalId === "dialog1"}
+        <WarehouseSheet onSave={fetchWarehouse} isOpen={openModalId === "warehouse-sheet-form"} closeSheet={closeModal} WarehouseSelected={warehouseSelected} />
+        <AlertConfirm
+          title="Eliminar almacén"
+          description="¿Estás seguro de que deseas eliminar este almacén? Perderás todos los datos asociados."
+          isOpen={openModalId === "warehouse-dialog-delete"}
           closeDialog={closeModal}
-          action={deleteTienda}
-        /> */}
+          variant="destructive"
+          action={() => {}}
+        />
     </div>
   )
 }

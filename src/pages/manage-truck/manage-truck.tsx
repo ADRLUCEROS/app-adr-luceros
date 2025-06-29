@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { AlertDialogDemo } from "@/components/alert"
+import { AlertConfirm } from "@/components/AlertConfirm"
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
 import type { Truck, TruckStatus } from "@/models/truck"
@@ -128,7 +128,7 @@ export const ManageTruck = () => {
             </div>
           </div>
         </DataTable>
-        <AlertDialogDemo
+        <AlertConfirm
           title={`Cambiar estado del camión ${truckSelected?.placa}`}
           isOpen={openModalId === "camion-estado-dialog"}
           closeDialog={closeModal}
@@ -147,7 +147,7 @@ export const ManageTruck = () => {
               <SelectItem value="activo">activo</SelectItem>
             </SelectContent>
           </Select>
-        </AlertDialogDemo>
+        </AlertConfirm>
     </div>
   )
 }

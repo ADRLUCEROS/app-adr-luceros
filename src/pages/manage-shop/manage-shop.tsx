@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 
 import { DataTable } from "@/components/BaseDataTable"
-import { AlertDialogDemo } from "@/components/alert"
+import { AlertConfirm } from "@/components/AlertConfirm"
 
 import { useModalStore } from "@/hooks/useModalStore"
 import { normalizeString } from '@/utils/normalizeText'
@@ -125,9 +125,11 @@ export const ManageStore = () => {
           </div>
         </DataTable>
         <TiendaSheet onSave={fetchStores} isOpen={openModalId === "sheet1"} closeSheet={closeModal} tiendaSeleccionada={tiendaSeleccionada} />
-        <AlertDialogDemo
-          title="¿Estas seguro que quieres eliminar esta tienda?"
+        <AlertConfirm
+          title="Eliminar Tienda"
+          description="¿Estás seguro de que deseas eliminar esta tienda? Perderás todos los datos asociados a esta tienda."
           isOpen={openModalId === "dialog1"}
+          variant="destructive"
           closeDialog={closeModal}
           action={deleteTienda}
         />

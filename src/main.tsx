@@ -17,7 +17,9 @@ import { Page404 } from './pages/page404.tsx';
 import { ContentWorkerRol } from './pages/content-worker-rol.tsx';
 import { ManageRol } from './pages/manage-rol/manage-rol.tsx';
 import { ContentPartnerStorehouse } from './pages/content-partner-storehouse.tsx';
-import { ManageStorehouse } from './pages/manage-storehouse/manage-storehouse.tsx';
+import { ManageWarehouse } from './pages/manage-warehouse/manage-warehouse.tsx';
+import { FormWorker } from './pages/manage-worker/form-worker.tsx';
+
 const { delivery, partner, store, truck, worker } = ROUTES.manage
 
 createRoot(document.getElementById('root')!).render(
@@ -36,9 +38,10 @@ createRoot(document.getElementById('root')!).render(
             <Route index element={<ManageWorker />}/>
             <Route path={`${worker}/rol`} element={<ManageRol />}/>
           </Route>
+          <Route path={`${worker}/form`} element={<FormWorker />} />
           <Route path={partner} element={<ContentPartnerStorehouse />}>
             <Route index element={<ManagePartner />}/>
-            <Route path={`${partner}/storehouse`} element={<ManageStorehouse />}/>
+            <Route path={`${partner}/storehouse`} element={<ManageWarehouse />}/>
           </Route>
           <Route path={delivery} element={<ManageDelivery />} />
           <Route path='*' element={<Page404 />}/>

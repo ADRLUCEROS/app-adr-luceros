@@ -16,13 +16,15 @@ import { Plus, Filter } from 'lucide-react'
 import { useRolStore } from "@/hooks/useRolStore"
 import type { Rol } from "@/models/rol"
 import { getRoles } from "@/http/rol-service"
+import { AlertConfirm } from "@/components/AlertConfirm"
+import { RolSheet } from "./rolSheet"
 
 export const ManageRol = () => {
-  const { setRolSelected } = useRolStore()
+  const { setRolSelected, rolSelected } = useRolStore()
   const [rol, setRol] = useState<Rol[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [rolFilter, setRolFilter] = useState<Rol[]>([])
-  const { openModal } = useModalStore()
+  const { openModal, closeModal, openModalId } = useModalStore()
   
   const filteredRol = (value: string) => {
     const filtered = rol.filter(r =>
@@ -50,6 +52,11 @@ export const ManageRol = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const openSheetRol = () => {
+    setRolSelected(null)
+    openModal("rol-sheet-form")
   }
 
   useEffect(() => {
@@ -84,18 +91,24 @@ export const ManageRol = () => {
               <Button 
                 variant='outline' 
                 className="border-blue-700 text-blue-700 hover:text-blue-500" 
-                onClick={() => openModal("sheet1")}
+                onClick={openSheetRol}
               ><Plus/>Agregar</Button>
             </div>
           </div>
         </DataTable>
-        {/* <TiendaSheet onSave={fetchStores} isOpen={openModalId === "sheet1"} closeSheet={closeModal} tiendaSeleccionada={tiendaSeleccionada} />
-        <AlertDialogDemo
+        <RolSheet 
+          onSave={fetchRol}
+          isOpen={openModalId === "rol-sheet-form"}
+          closeSheet={closeModal}
+          itemSelected={rolSelected}
+        />
+        <AlertConfirm
           title="¿Estas seguro que quieres eliminar esta tienda?"
-          isOpen={openModalId === "dialog1"}
+          isOpen={openModalId === "rol-dialog-delete"}
           closeDialog={closeModal}
-          action={deleteTienda}
-        /> */}
+          variant="destructive"
+          action={() => {}}
+        />
     </div>
   )
 }

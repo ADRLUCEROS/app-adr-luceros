@@ -72,7 +72,7 @@ export const columnsRol = (onOpenModal: (id: string) => void, set: (model: Parti
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                onOpenModal("rol-sheet")
+                onOpenModal("rol-sheet-form")
                 set(row.original)
               }}
             >
@@ -83,7 +83,7 @@ export const columnsRol = (onOpenModal: (id: string) => void, set: (model: Parti
             variant="destructive"
               onClick={() => {
                 set(row.original)
-                onOpenModal("rol-dialog")
+                onOpenModal("rol-dialog-delete")
               }}
             >
               Eliminar

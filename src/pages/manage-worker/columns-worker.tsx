@@ -165,7 +165,7 @@ export const columnsWorker = (onOpenModal: (id: string) => void, set: (model: Pa
             <DropdownMenuItem disabled>
               Ver detalles
             </DropdownMenuItem>
-            <Link to='/form-truck'>
+            <Link to={'./form'}>
               <DropdownMenuItem
                 onClick={() => {
                   set(row.original)

@@ -8,24 +8,23 @@ import { BaseCombobox, type ItemCombobox } from "@/components/BaseCombobox"
 import { useEffect, useState } from "react"
 import { getDepartments, getDistricts, getProvinces } from "@/http/location-service"
 import type { Department, District, Province } from "@/models/location"
-import { Textarea } from "@/components/ui/textarea"
 import { getBusiness } from '@/http/business-service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { storeSchema } from '@/validations/store-schema'
-import type { Tienda, TiendaList } from '@/models/shop'
-import { saveTiendas } from '@/http/tienda-service'
+import type { WarehouseSaveRequest } from '@/models/warehouse'
+import { saveWarehouse } from '@/http/warehouse-service'
 import { toast } from 'sonner'
-import { useTiendaStore } from '@/hooks/useTiendaStore'
+import { useWarehouseStore } from '@/hooks/useWarehouseStore'
+import { warehouseSaveRequestSchema } from '@/validations/warehouse-schema'
 
-interface TiendaSheetProps {
+interface WarehouseSheetProps {
   onSave: () => void
   isOpen: boolean
   closeSheet: () => void
-  tiendaSeleccionada?: Partial<TiendaList> | null
+  WarehouseSelected?: Partial<WarehouseSaveRequest> | null
 }
 
-export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: TiendaSheetProps) {
-  const { setTienda } = useTiendaStore()
+export function WarehouseSheet({ onSave, isOpen, closeSheet, WarehouseSelected }: WarehouseSheetProps) {
+  const { setWarehouseSelected } = useWarehouseStore()
   const [business, setBusiness] = useState<ItemCombobox[]>([])
   const [selectedBusiness, setSelectedBusiness] = useState<string | number>("")
 
@@ -38,30 +37,20 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
   const [districts, setDistricts] = useState<District[]>([])
   const [selectedDistrict, setSelectedDistrict] = useState<string | number>("")
 
-  // const [formValues, setFormValues] = useState<FieldValues>({
-  //   nombreTienda: '',
-  //   direccion: '',
-  //   horarioInicio: '',
-  //   horarioFin: '',
-  //   observacion: '',
-  // })
-
   const { register, handleSubmit, formState: {errors}, setValue, reset } = useForm({
-    resolver: zodResolver(storeSchema),
+    resolver: zodResolver(warehouseSaveRequestSchema),
   })
 
   useEffect(() => {
-    if (tiendaSeleccionada) {
-      setValue("nombreTienda", tiendaSeleccionada.nombreTienda || '');
-      setValue("direccion", tiendaSeleccionada.direccion || '');
-      setValue("horarioInicio", tiendaSeleccionada.horarioInicio || '');
-      setValue("horarioFin", tiendaSeleccionada.horarioFin || '');
-      setValue("observacion", tiendaSeleccionada.observacion || '');
-      if (tiendaSeleccionada.empresa) setSelectedBusiness(tiendaSeleccionada.empresa?.idEmpresa || '');
+    if (WarehouseSelected) {
+      setValue("clienteCorporativoId", (WarehouseSelected.clienteCorporativoId || '').toString())
+      setValue("direccion", WarehouseSelected.direccion || '')
+      setValue("id_locacion_peru", (WarehouseSelected.id_locacion_peru || '').toString())
+      setValue("nombreAlmacen", WarehouseSelected.nombreAlmacen || '')
     } else {
-      reset(); // Resetear los campos si no hay tienda seleccionada
+      reset();
     }
-  }, [tiendaSeleccionada, setValue, reset]);
+  }, [WarehouseSelected, setValue, reset]);
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -116,21 +105,21 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
   },[selectedProvince, selectedDepartment])
 
   const handleStoreSubmit = (data: FieldValues) => {
-    const body: Partial<Tienda> = {
-      ...tiendaSeleccionada, 
+    const body: Partial<WarehouseSaveRequest> = {
+      ...WarehouseSelected, 
       ...data,
     }
 
     if (typeof selectedBusiness  === 'number') {
       const idEmpresa = selectedBusiness
-      body.idEmpresa = idEmpresa
+      body.clienteCorporativoId = idEmpresa
     }
 
-    saveTiendas(body).then(() => {
+    saveWarehouse(body).then(() => {
       closed()
       onSave()
       toast.success('Operación exitosa', {
-        description: "La tienda se ha guardado correctamente.",
+        description: "La Warehouse se ha guardado correctamente.",
         richColors: true,
         closeButton: true,
         icon: "✅",
@@ -139,7 +128,7 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
     .catch((error) => {
       console.error("Error saving store:", error)
       toast.error('Error del servidor', {
-        description: "No se pudo guardar la tienda.",
+        description: "No se pudo guardar la Warehouse.",
         richColors: true,
         closeButton: true,
         icon: "🚨",
@@ -148,24 +137,24 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
   }
 
   const closed = () => {
-    setTienda(null)
+    setWarehouseSelected(null)
     closeSheet()
   }
 
   return (
-    <BaseSheet title={tiendaSeleccionada ? "Editar Tienda" : "Registrar Tienda"} isOpen={isOpen} closeSheet={closed}>
+    <BaseSheet title={WarehouseSelected ? "Editar Warehouse" : "Registrar Warehouse"} isOpen={isOpen} closeSheet={closed}>
       <form onSubmit={handleSubmit((data) => handleStoreSubmit(data))}>
        <div className="grid gap-4 px-4">
           <div className="grid items-center gap-2">
             <Label htmlFor="name" className="text-right">
-              Nombre de tienda
+              Nombre de Warehouse
             </Label>
             <Input 
               id="name" 
-              className={` ${errors.nombreTienda && 'border-red-500'}`} 
-              {...register('nombreTienda')}
+              className={` ${errors.nombreAlmacen && 'border-red-500'}`} 
+              {...register('nombreAlmacen')}
             />
-            {errors.nombreTienda && <p className='text-red-800 text-sm'>{errors.nombreTienda.message}</p>}
+            {errors.nombreAlmacen && <p className='text-red-800 text-sm'>{errors.nombreAlmacen.message}</p>}
           </div>
           <div className="grid items-center gap-2">
             <Label htmlFor="departamento" className="text-right">
@@ -212,39 +201,6 @@ export function TiendaSheet({ onSave, isOpen, closeSheet, tiendaSeleccionada }: 
               {...register('direccion')}
             />
             {errors.direccion && <p className='text-red-800 text-sm'>{errors.direccion.message}</p>}
-          </div>
-          <div className="grid items-center gap-2">
-            <Label className="text-right">
-              Horario de atención
-            </Label>
-            <div className=" flex items-center gap-2">
-              <Input 
-                type="time" 
-                className={`w-fit rounded-full ${errors.horarioInicio && 'border-red-500'}`} 
-                {...register('horarioInicio')}
-              />
-              -
-              <Input 
-                type="time" 
-                className={`w-fit rounded-full ${errors.horarioFin && 'border-red-500'}`} 
-                {...register('horarioFin')}
-              />
-            </div>
-            {
-              errors.horarioInicio ? 
-              <p className='text-red-800 text-sm'>{errors.horarioInicio.message}</p> 
-              : (errors.horarioFin && <p className='text-red-800 text-sm'>{errors.horarioFin.message}</p>)
-            }
-          </div>
-          <div className="grid items-center gap-2">
-            <Label htmlFor="observación" className="text-right">
-              Observación
-            </Label>
-            <Textarea 
-              id="observación" 
-              placeholder="Type your message here." 
-              {...register('observacion')}
-            />
           </div>
           <div className="grid items-center gap-2">
             <Label htmlFor="distrito" className="text-right">

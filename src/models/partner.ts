@@ -7,3 +7,11 @@ export interface Partner {
   direccionFiscal: string;
   empresa: Business;
 }
+
+export interface PartnerSaveRequest {
+  idClienteCorporativo: number;
+  nombre: string;
+  razonSocial: string;
+  direccionFiscal: string;
+  empresaId: number;
+}

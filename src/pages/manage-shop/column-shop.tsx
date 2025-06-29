@@ -13,7 +13,7 @@ import {
 import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Clock, MoreVertical } from "lucide-react"
 
-import type { Company } from "@/models/company"
+import type { Business } from "@/models/business"
 import type { TiendaList } from "@/models/shop"
 
 export const columnsStore = (onOpenModal: (id: string) => void, set: (tienda: Partial<TiendaList>) => void): ColumnDef<TiendaList>[] => [
@@ -165,7 +165,7 @@ export const columnsStore = (onOpenModal: (id: string) => void, set: (tienda: Pa
       )
     },
     cell: ({ row }) => {
-      const empresa: Company = row.getValue("empresa")
+      const empresa: Business = row.getValue("empresa")
       if(!empresa) return <div className="lowercase"><Badge className="bg-orange-50 text-orange-800">N/A</Badge></div>
       return <div className="lowercase"><Badge className="bg-sky-50 text-sky-800">{empresa.razonSocial}</Badge></div>
     },
